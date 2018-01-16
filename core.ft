@@ -113,6 +113,10 @@
 : immediate ( -- )
     1 mrd2 @ word-head 32 + !
 ;
+: B ( byte -- )
+    ep @ c!
+    ep @ 1 + ep !
+;
 : . >rcx print-rcx-as-int ;
 : %s >rcx print-rcx-as-cstr ;
 
