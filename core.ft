@@ -110,4 +110,9 @@
 : word-immediate ( word -- flag )
   word-head 32 + @
 ;
-: . rax> >rcx print-rcx-as-int ;
+: immediate ( -- )
+    1 mrd2 @ word-head 32 + !
+;
+: . >rcx print-rcx-as-int ;
+: %s >rcx print-rcx-as-cstr ;
+
