@@ -153,6 +153,8 @@
     ep @                ( next-of-else )
 ; immediate
 
+: true -1 ;
+: false 0 ;
 : . >rcx print-rcx-as-int ;
 : %s >rcx print-rcx-as-cstr ;
 
