@@ -121,6 +121,10 @@
     ep @ d!
     ep @ 4 + ep !
 ;
+: Q ( qword -- )
+    ep @ !
+    ep @ 8 + ep !
+;
 : exit
     0xc3 B ( RET )
 ; immediate
