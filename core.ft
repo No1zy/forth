@@ -35,11 +35,11 @@
     X 0x48 X 0x29 X 0x03        ( sub    [rbx], rax )
 ;
 : pick ( xn ... x1 x0 -- xn ... x1 x0 xn )
-    X 0x48 X 0x8b X 0x03        ( mov    rax,QWORD PTR [rbx] ) 
-    X 0x48 X 0x83 X 0xc3 X 0x08 ( add    rbx,0x8 )
-    X 0x48 X 0x8b X 0x04 X 0x03 ( mov    rax,QWORD PTR [rbx+rax*1] )
-    X 0x48 X 0x83 X 0xeb X 0x08 ( sub    rbx,0x8 )
-    X 0x48 X 0x89 X 0x03        ( sub    rbx,0x8 )
+    X 0x48 X 0x8b X 0x03         ( mov    rax,QWORD PTR [rbx] )
+    X 0x48 X 0x83 X 0xc3 X 0x08  ( add    rbx,0x8 )
+    X 0x48 X 0x8b X 0x04 X 0xc3  ( mov    rax,QWORD PTR [rbx+rax*8] )
+    X 0x48 X 0x83 X 0xeb X 0x08  ( sub    rbx,0x8 ) 
+    X 0x48 X 0x89 X 0x03         ( mov    QWORD PTR [rbx],rax )
 ;
 : dup ( n -- n n )
     0 pick
@@ -117,9 +117,14 @@
     ep @ c!
     ep @ 1 + ep !
 ;
+: D ( dword -- )
+    ep @ d!
+    ep @ 4 + ep !
+;
 : exit
     0xc3 B ( RET )
 ; immediate
+
 : . >rcx print-rcx-as-int ;
 : %s >rcx print-rcx-as-cstr ;
 
