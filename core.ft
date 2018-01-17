@@ -129,6 +129,30 @@
     0xc3 B ( RET )
 ; immediate
 
+: if ( -- next-of-if )
+    0x48 B 0x8b B 0x03 B        ( MOV  RAX, [RBX] )
+    0x48 B 0x83 B 0xc3 B 0x08 B ( ADD  RBX, 8     )
+    0x48 B 0x85 B 0xc0 B        ( TEST RAX, RAX   )
+    0x0f B 0x84 B 0x00000000 D  ( JZ REL32        )
+    ep @
+; immediate
+
+: then ( next-of-jx -- )
+    ep @ over ( next-of-jx then-addr next-of-jx )
+    -         ( next-of-jx rel32-value )
+    swap 4 -  ( rel32-value real32-addr )
+    d!
+; immediate
+
+: else ( next-of-if -- next-of-else )
+    0xe9 B 0x00000000 D ( JMP REL32 )
+    dup 4 -             ( next-of-if    rel32-addr-of-if )
+    swap                ( rel32-addr-of-if next-of-if )
+    ep @ swap -         ( rel32-addr-of-if rel32-value-of-if )
+    swap d!             (  )
+    ep @                ( next-of-else )
+; immediate
+
 : . >rcx print-rcx-as-int ;
 : %s >rcx print-rcx-as-cstr ;
 
