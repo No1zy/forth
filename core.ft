@@ -156,6 +156,27 @@
 : true -1 ;
 : false 0 ;
 : = - if false else true then ;
+
+: begin ( -- begin-addr )
+    ep @
+; immediate
+
+: while ( begin-addr -- begin-addr )
+    0x48 B 0x8b B 0x03 B        ( mov rax, [rbx] )
+    0x48 B 0x83 B 0xc3 B 0x08 B ( add rbx, 8 )
+    0x48 B 0x85 B 0xc0 B        ( TEST rax, rax )
+    0x0f B 0x84 B 0x00000000 D  ( JZ REL32 )
+    ep @
+; immediate
+
+: repeat ( begin-addr next-of-while -- )
+    0xe9 B 0x00000000 D ( jmp rel32 )
+    swap ep @ - ( next-of-while begin-minus-repeat )
+    ep @ 4 - d! ( next-of-while )
+    ep @ over - ( next-of-while repeat-minus-while )
+    swap 4 - d! (  )
+; immediate
+
 : . >rcx print-rcx-as-int ;
 : %s >rcx print-rcx-as-cstr ;
 
